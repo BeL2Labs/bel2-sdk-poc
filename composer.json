@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "post-install-cmd": [
+            "patch -p1 < patches/custom_changes.patch"
+        ],
+        "post-update-cmd": [
+            "patch -p1 < patches/custom_changes.patch"
+        ]
+    }
+}
