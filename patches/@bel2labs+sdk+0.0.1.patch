@@ -1,0 +1,17 @@
+diff --git a/node_modules/@bel2labs/sdk/dist/services/zkp/providers/ethers-v6/transaction-verification.d.ts b/node_modules/@bel2labs/sdk/dist/services/zkp/providers/ethers-v6/transaction-verification.d.ts
+index 59bf98e..d53ff24 100644
+--- a/node_modules/@bel2labs/sdk/dist/services/zkp/providers/ethers-v6/transaction-verification.d.ts
++++ b/node_modules/@bel2labs/sdk/dist/services/zkp/providers/ethers-v6/transaction-verification.d.ts
+@@ -1,4 +1,4 @@
+-import { ContractTransactionResponse, JsonRpcProvider, JsonRpcSigner } from "ethersv6";
++import { ContractTransactionResponse, JsonRpcProvider, JsonRpcSigner, Wallet } from "ethersv6";
+ import { TransactionVerification } from "../../transaction-verification";
+ export declare class EthersV6TransactionVerification extends TransactionVerification {
+     private roProvider;
+@@ -19,5 +19,5 @@ export declare class EthersV6TransactionVerification extends TransactionVerifica
+      *
+      * @param scriptHex If you want ZKP to ensure that a script output matches transaction outputs, pass the script HEX used by the transaction. This is optional.
+      */
+-    submitVerificationRequest(signer: JsonRpcSigner, scriptHex?: string): Promise<ContractTransactionResponse>;
++    submitVerificationRequest(signer: JsonRpcSigner | Wallet, scriptHex?: string): Promise<ContractTransactionResponse>;
+ }

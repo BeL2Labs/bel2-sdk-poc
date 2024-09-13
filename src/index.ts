@@ -33,14 +33,36 @@ program
             }
 
             const provider = new ethers.JsonRpcProvider(rpcUrl);
-            const signingKey = new ethers.SigningKey(privateKey);
-            const signer = new ethers.Wallet(signingKey, provider);
 
-            const verification = await ZKP.EthersV6.TransactionVerification.create(txId, parseInt(chainId));
+            const verification = await ZKP.EthersV6.TransactionVerification.create(txId, parseInt(chainId), provider);
+
+            console.log("Contract address:", verification.contractAddress);
 
             if (!verification.isSubmitted()) {
-                const response = await verification.submitVerificationRequest((ethers.JsonRpcSigner) signer);
-                console.log("Verification submitted:", response);
+                const signer = new ethers.Wallet(privateKey, provider);
+
+                const balance = await signer.provider?.getBalance(signer.address) ?? -40;
+                console.log("Account balance:", ethers.formatEther(balance), "ETH");
+
+                let network = await signer.provider?.getNetwork();
+                console.log("Signer provider - Connected to network:", network?.name, "Chain ID:", network?.chainId);
+
+                network = await provider.getNetwork();
+                console.log("Signer provider - Connected to network:", network.name, "Chain ID:", network.chainId);
+
+                try {
+                    const response = await verification.submitVerificationRequest(signer);
+                    console.log("Verification submitted:", response);
+                } catch (err: any) {
+                    console.error("Error details:", err);
+                    if (err.transaction) {
+                        console.error("Transaction details:", err.transaction);
+                    }
+                    if (err.receipt) {
+                        console.error("Transaction receipt:", err.receipt);
+                    }
+                    throw err;
+                }
             } else {
                 console.log("Verification already submitted");
             }
