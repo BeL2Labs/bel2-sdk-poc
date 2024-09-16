@@ -32,13 +32,13 @@ program
                 throw new Error('Missing environment variables');
             }
 
+
             const provider = new ethers.JsonRpcProvider(rpcUrl);
 
             const verification = await ZKP.EthersV6.TransactionVerification.create(txId, parseInt(chainId), provider);
 
-            console.log("Contract address:", verification.contractAddress);
-
             if (!verification.isSubmitted()) {
+
                 const signer = new ethers.Wallet(privateKey, provider);
 
                 const balance = await signer.provider?.getBalance(signer.address) ?? -40;
@@ -77,8 +77,8 @@ program
                 process.stdin.resume();
             } else {
                 // If the user doesn't want to subscribe, check the status once
-                const status = await verification.checkStatus();
-                console.log("Current verification status:", status);
+                await verification.checkStatus();
+                console.log("Current verification status:", verification.status$.getValue());
                 process.exit(0);
             }
 
